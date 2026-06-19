@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="001-create-sales" author="pharmaops">
+        <createTable tableName="sales">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <!-- store_id e user_id vêm do identity-service; sem FK entre bancos (ADR-003) -->
+            <column name="store_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <!-- NULL quando a venda não envolve produto controlado e não é forçada -->
+            <column name="responsible_pharmacist_id" type="UUID">
+                <constraints nullable="true"/>
+            </column>
+            <!-- forced=true: venda realizada mesmo sem estoque confirmado -->
+            <column name="forced" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <!-- PENDING, CONFIRMED, CANCELLED -->
+            <column name="status" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total" type="NUMERIC(12,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="correlation_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

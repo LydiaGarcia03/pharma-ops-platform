@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="004-create-monthly-financial-report" author="pharmaops">
+        <createTable tableName="monthly_financial_report">
+            <column name="store_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="year" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="month" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_sales" type="NUMERIC(14,2)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_items" type="INTEGER" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="average_ticket" type="NUMERIC(10,2)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey
+                tableName="monthly_financial_report"
+                columnNames="store_id, year, month"
+                constraintName="pk_monthly_financial_report"/>
+    </changeSet>
+
+</databaseChangeLog>

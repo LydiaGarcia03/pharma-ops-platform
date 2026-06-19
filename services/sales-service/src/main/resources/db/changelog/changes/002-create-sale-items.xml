@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="002-create-sale-items" author="pharmaops">
+        <createTable tableName="sale_items">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="sale_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <!-- product_id e batch_id vêm do inventory-service; sem FK entre bancos (ADR-003) -->
+            <column name="product_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="batch_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unit_price" type="NUMERIC(10,2)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="sale_items"
+                baseColumnNames="sale_id"
+                constraintName="fk_sale_items_sale"
+                referencedTableName="sales"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>

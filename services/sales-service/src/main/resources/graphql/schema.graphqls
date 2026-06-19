@@ -1,0 +1,65 @@
+type Query {
+    sale(id: ID!): Sale
+}
+
+type Mutation {
+    createSale(input: CreateSaleInput!): Sale!
+    processReturn(input: ProcessReturnInput!): Return!
+}
+
+type Sale {
+    id: ID!
+    storeId: ID!
+    userId: ID!
+    responsiblePharmacistId: ID
+    forced: Boolean!
+    status: String!
+    items: [SaleItem!]!
+    total: String!
+    correlationId: ID!
+    createdAt: String!
+}
+
+type SaleItem {
+    id: ID!
+    productId: ID!
+    batchId: ID!
+    quantity: Int!
+    unitPrice: String!
+}
+
+type Return {
+    id: ID!
+    saleId: ID!
+    productId: ID!
+    batchId: ID!
+    userId: ID!
+    quantity: Int!
+    reason: String!
+    createdAt: String!
+}
+
+input CreateSaleInput {
+    storeId: ID!
+    userId: ID!
+    responsiblePharmacistId: ID
+    forced: Boolean!
+    items: [SaleItemInput!]!
+}
+
+input SaleItemInput {
+    productId: ID!
+    controlled: Boolean!
+    quantity: Int!
+    unitPrice: String!
+}
+
+input ProcessReturnInput {
+    saleId: ID!
+    productId: ID!
+    batchId: ID!
+    userId: ID!
+    responsiblePharmacistId: ID
+    quantity: Int!
+    reason: String!
+}
