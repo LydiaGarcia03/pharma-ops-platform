@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="003-create-profiles" author="lydia">
+        <createTable tableName="profiles">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="description" type="TEXT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="003-create-permissions" author="lydia">
+        <createTable tableName="permissions">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="description" type="TEXT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="003-create-profile-permissions" author="lydia">
+        <createTable tableName="profile_permissions">
+            <column name="profile_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="permission_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey
+                tableName="profile_permissions"
+                columnNames="profile_id, permission_id"
+                constraintName="pk_profile_permissions"/>
+
+        <addForeignKeyConstraint
+                baseTableName="profile_permissions"
+                baseColumnNames="profile_id"
+                referencedTableName="profiles"
+                referencedColumnNames="id"
+                constraintName="fk_profile_permissions_profile"/>
+
+        <addForeignKeyConstraint
+                baseTableName="profile_permissions"
+                baseColumnNames="permission_id"
+                referencedTableName="permissions"
+                referencedColumnNames="id"
+                constraintName="fk_profile_permissions_permission"/>
+    </changeSet>
+
+</databaseChangeLog>

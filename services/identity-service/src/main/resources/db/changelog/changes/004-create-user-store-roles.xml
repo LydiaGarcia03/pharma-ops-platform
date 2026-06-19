@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="004-create-user-store-roles" author="lydia">
+        <createTable tableName="user_store_roles">
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="profile_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <!--
+                store_id nullable: NULL significa ADMIN de rede (acesso global).
+                PRIMARY KEY composta não pode incluir colunas anuláveis no PostgreSQL,
+                por isso usamos dois índices únicos parciais abaixo.
+            -->
+            <column name="store_id" type="UUID"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="user_store_roles"
+                baseColumnNames="user_id"
+                referencedTableName="users"
+                referencedColumnNames="id"
+                constraintName="fk_user_store_roles_user"/>
+
+        <addForeignKeyConstraint
+                baseTableName="user_store_roles"
+                baseColumnNames="profile_id"
+                referencedTableName="profiles"
+                referencedColumnNames="id"
+                constraintName="fk_user_store_roles_profile"/>
+
+        <addForeignKeyConstraint
+                baseTableName="user_store_roles"
+                baseColumnNames="store_id"
+                referencedTableName="stores"
+                referencedColumnNames="id"
+                constraintName="fk_user_store_roles_store"/>
+
+        <!-- Unicidade para usuários com store específica -->
+        <createIndex tableName="user_store_roles"
+                     indexName="user_store_roles_with_store_idx"
+                     unique="true">
+            <column name="user_id"/>
+            <column name="profile_id"/>
+            <column name="store_id"/>
+            <where>store_id IS NOT NULL</where>
+        </createIndex>
+
+        <!-- Unicidade para ADMIN de rede (store_id IS NULL) -->
+        <createIndex tableName="user_store_roles"
+                     indexName="user_store_roles_global_idx"
+                     unique="true">
+            <column name="user_id"/>
+            <column name="profile_id"/>
+            <where>store_id IS NULL</where>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>
