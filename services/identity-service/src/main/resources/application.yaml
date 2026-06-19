@@ -24,6 +24,11 @@ spring:
       host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
 
+jwt:
+  secret: ${JWT_SECRET:pharmaops-dev-secret-key-must-be-at-least-32-chars}
+  expiration-minutes: ${JWT_EXPIRATION_MINUTES:15}
+  refresh-expiration-days: ${JWT_REFRESH_EXPIRATION_DAYS:7}
+
 server:
   port: ${SERVER_PORT:8081}
 

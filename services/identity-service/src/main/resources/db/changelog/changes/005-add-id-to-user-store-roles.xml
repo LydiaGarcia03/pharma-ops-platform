@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <!--
+        JPA requires @Id on every entity. user_store_roles uses partial unique indexes
+        instead of a composite PK (because store_id is nullable), so it has no natural
+        primary key column. This changeset adds a surrogate UUID id to satisfy JPA.
+    -->
+    <changeSet id="005-add-id-to-user-store-roles" author="lydia">
+        <addColumn tableName="user_store_roles">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addPrimaryKey tableName="user_store_roles"
+                       columnNames="id"
+                       constraintName="pk_user_store_roles"/>
+    </changeSet>
+
+</databaseChangeLog>

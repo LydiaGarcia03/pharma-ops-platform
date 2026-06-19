@@ -1,0 +1,55 @@
+type Query {
+    stores: [Store!]!
+}
+
+type Mutation {
+    register(input: RegisterUserInput!): User!
+    login(input: LoginInput!): AuthPayload!
+    createStore(input: CreateStoreInput!): Store!
+    assignProfile(input: AssignProfileInput!): Boolean!
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    active: Boolean!
+    passwordResetRequired: Boolean!
+    createdAt: String!
+}
+
+type Store {
+    id: ID!
+    name: String!
+    taxId: String!
+    active: Boolean!
+    createdAt: String!
+}
+
+type AuthPayload {
+    accessToken: String!
+    refreshToken: String!
+    passwordResetRequired: Boolean!
+}
+
+input RegisterUserInput {
+    name: String!
+    email: String!
+    password: String!
+}
+
+input LoginInput {
+    email: String!
+    password: String!
+}
+
+input CreateStoreInput {
+    name: String!
+    taxId: String!
+}
+
+input AssignProfileInput {
+    userId: ID!
+    profileId: ID!
+    storeId: ID
+}
