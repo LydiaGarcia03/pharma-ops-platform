@@ -1,0 +1,57 @@
+type Query {
+    products: [Product!]!
+    product(id: ID!): Product
+    inventory(productId: ID!, storeId: ID!): InventoryItem!
+}
+
+type Mutation {
+    createProduct(input: CreateProductInput!): Product!
+    addBatch(input: AddBatchInput!): Batch!
+    restock(input: RestockInput!): Boolean!
+}
+
+type Product {
+    id: ID!
+    name: String!
+    barcode: String!
+    controlled: Boolean!
+    salePrice: String!
+    active: Boolean!
+}
+
+type Batch {
+    id: ID!
+    productId: ID!
+    batchNumber: String!
+    expirationDate: String!
+    initialQuantity: Int!
+}
+
+type InventoryItem {
+    productId: ID!
+    storeId: ID!
+    quantity: Int!
+    minimumQuantity: Int!
+}
+
+input CreateProductInput {
+    name: String!
+    barcode: String!
+    controlled: Boolean!
+    salePrice: String!
+}
+
+input AddBatchInput {
+    productId: ID!
+    batchNumber: String!
+    expirationDate: String!
+    initialQuantity: Int!
+}
+
+input RestockInput {
+    productId: ID!
+    storeId: ID!
+    batchId: ID!
+    quantity: Int!
+    correlationId: ID!
+}
