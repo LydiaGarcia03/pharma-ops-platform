@@ -30,6 +30,7 @@ type AuthPayload {
     accessToken: String!
     refreshToken: String!
     passwordResetRequired: Boolean!
+    user: User!
 }
 
 input RegisterUserInput {

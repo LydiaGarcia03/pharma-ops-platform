@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+:root {
+  --sidebar-bg:           #031124;
+  --sidebar-bg-header:    #020a17;
+  --sidebar-border:       #0a1e3f;
+  --sidebar-active-bg:    #0b254d;
+  --sidebar-text:         #94a3b8;
+  --sidebar-text-hover:   #e2e8f0;
+  --sidebar-text-active:  #bfdbfe;
+  --sidebar-icon:         #64748b;
+  --sidebar-icon-active:  #60a5fa;
+  --sidebar-section-label: rgba(96, 165, 250, 0.6);
+  --sidebar-active-accent: #3b82f6;
+
+  --page-bg:       #f3f7fb;
+  --topbar-bg:     #ffffff;
+  --topbar-border: #e2e8f0;
+
+  --card-bg:     #ffffff;
+  --card-border: #e2e8f0;
+  --card-radius: 0.75rem;
+  --card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
+
+  --text-heading: #1e293b;
+  --text-body:    #475569;
+  --text-muted:   #94a3b8;
+
+  --blue-500:    #3b82f6;
+  --blue-600:    #2563eb;
+  --blue-700:    #1d4ed8;
+  --emerald-500: #10b981;
+  --amber-500:   #f59e0b;
+  --red-500:     #ef4444;
+  --purple-600:  #9333ea;
+}
+
+@theme {
+  --color-sidebar:         var(--sidebar-bg);
+  --color-sidebar-header:  var(--sidebar-bg-header);
+  --color-sidebar-border:  var(--sidebar-border);
+  --color-sidebar-active:  var(--sidebar-active-bg);
+  --color-page:            var(--page-bg);
+  --color-topbar:          var(--topbar-bg);
+  --color-card:            var(--card-bg);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: var(--page-bg);
+  color: var(--text-heading);
+}

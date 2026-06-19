@@ -42,24 +42,23 @@
                 referencedColumnNames="id"
                 constraintName="fk_user_store_roles_store"/>
 
-        <!-- Unicidade para usuários com store específica -->
-        <createIndex tableName="user_store_roles"
-                     indexName="user_store_roles_with_store_idx"
-                     unique="true">
-            <column name="user_id"/>
-            <column name="profile_id"/>
-            <column name="store_id"/>
-            <where>store_id IS NOT NULL</where>
-        </createIndex>
+        <!-- Índices parciais via SQL nativo: <createIndex> não suporta cláusula WHERE no schema do Liquibase -->
+        <sql>
+            CREATE UNIQUE INDEX user_store_roles_with_store_idx
+            ON user_store_roles (user_id, profile_id, store_id)
+            WHERE store_id IS NOT NULL;
+        </sql>
 
-        <!-- Unicidade para ADMIN de rede (store_id IS NULL) -->
-        <createIndex tableName="user_store_roles"
-                     indexName="user_store_roles_global_idx"
-                     unique="true">
-            <column name="user_id"/>
-            <column name="profile_id"/>
-            <where>store_id IS NULL</where>
-        </createIndex>
+        <sql>
+            CREATE UNIQUE INDEX user_store_roles_global_idx
+            ON user_store_roles (user_id, profile_id)
+            WHERE store_id IS NULL;
+        </sql>
+
+        <rollback>
+            DROP INDEX IF EXISTS user_store_roles_with_store_idx;
+            DROP INDEX IF EXISTS user_store_roles_global_idx;
+        </rollback>
     </changeSet>
 
 </databaseChangeLog>

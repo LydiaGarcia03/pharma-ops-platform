@@ -19,7 +19,8 @@ public class AuthResolver {
         AuthenticateUserUseCase.Result result = authenticateUserUseCase.authenticate(
                 new AuthenticateUserUseCase.Command(input.email(), input.password())
         );
-        return new AuthPayload(result.accessToken(), result.refreshToken(), result.passwordResetRequired());
+        UserResponse user = new UserResponse(result.userId(), result.userName(), result.userEmail(), true, result.passwordResetRequired(), null);
+        return new AuthPayload(result.accessToken(), result.refreshToken(), result.passwordResetRequired(), user);
     }
 
     @MutationMapping
@@ -33,5 +34,5 @@ public class AuthResolver {
 
     record RegisterUserInput(String name, String email, String password) {}
 
-    record AuthPayload(String accessToken, String refreshToken, boolean passwordResetRequired) {}
+    record AuthPayload(String accessToken, String refreshToken, boolean passwordResetRequired, UserResponse user) {}
 }

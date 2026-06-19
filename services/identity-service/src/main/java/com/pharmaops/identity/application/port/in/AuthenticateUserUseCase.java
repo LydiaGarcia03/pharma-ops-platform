@@ -6,5 +6,6 @@ public interface AuthenticateUserUseCase {
 
     record Command(String email, String password) {}
 
-    record Result(String accessToken, String refreshToken, boolean passwordResetRequired) {}
+    record Result(String accessToken, String refreshToken, boolean passwordResetRequired,
+                  String userId, String userName, String userEmail) {}
 }

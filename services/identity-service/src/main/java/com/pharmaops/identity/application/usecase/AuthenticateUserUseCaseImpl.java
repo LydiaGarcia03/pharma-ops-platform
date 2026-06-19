@@ -44,6 +44,7 @@ public class AuthenticateUserUseCaseImpl implements AuthenticateUserUseCase {
         String refreshToken = UUID.randomUUID().toString();
         tokenRepository.save(user.getId(), refreshToken, refreshTokenTtl);
 
-        return new Result(accessToken, refreshToken, user.isPasswordResetRequired());
+        return new Result(accessToken, refreshToken, user.isPasswordResetRequired(),
+                user.getId().toString(), user.getName(), user.getEmail());
     }
 }
