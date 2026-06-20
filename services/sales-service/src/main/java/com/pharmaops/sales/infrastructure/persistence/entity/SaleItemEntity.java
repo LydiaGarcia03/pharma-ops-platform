@@ -19,8 +19,10 @@ public class SaleItemEntity {
     @Column(name = "id")
     private UUID id;
 
-    @Column(name = "sale_id", nullable = false)
-    private UUID saleId;
+    // Lado proprietário do relacionamento bidirecional: JPA inclui sale_id no INSERT.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sale_id", nullable = false)
+    private SaleEntity sale;
 
     @Column(name = "product_id", nullable = false)
     private UUID productId;

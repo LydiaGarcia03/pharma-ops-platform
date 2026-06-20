@@ -7,6 +7,7 @@ import { DashboardPage } from '@/features/dashboard/DashboardPage'
 import { InventoryPage } from '@/features/inventory/InventoryPage'
 import { PointOfSalePage } from '@/features/sales/PointOfSalePage'
 import { ReportsPage } from '@/features/reports/ReportsPage'
+import { ReturnPage } from '@/features/returns/ReturnPage'
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const token = useSelector((s: RootState) => s.auth.token)
@@ -32,6 +33,7 @@ export function AppRouter() {
           <Route path="sales"      element={<PointOfSalePage />} />
           <Route path="inventory"  element={<InventoryPage />} />
           <Route path="reports"    element={<ReportsPage />} />
+          <Route path="returns"    element={<ReturnPage />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/dashboard" replace />} />

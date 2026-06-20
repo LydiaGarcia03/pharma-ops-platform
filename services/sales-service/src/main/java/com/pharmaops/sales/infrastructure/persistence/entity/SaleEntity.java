@@ -46,7 +46,7 @@ public class SaleEntity {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "saleId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @Builder.Default
     private List<SaleItemEntity> items = new ArrayList<>();
 }

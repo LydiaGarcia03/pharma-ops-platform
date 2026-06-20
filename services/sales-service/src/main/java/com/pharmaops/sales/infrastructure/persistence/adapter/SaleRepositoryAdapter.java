@@ -50,7 +50,7 @@ public class SaleRepositoryAdapter implements SaleRepository {
     private SaleItem itemToDomain(SaleItemEntity e) {
         return SaleItem.builder()
                 .id(e.getId())
-                .saleId(e.getSaleId())
+                .saleId(e.getSale().getId())
                 .productId(e.getProductId())
                 .batchId(e.getBatchId())
                 .quantity(e.getQuantity())
@@ -59,18 +59,7 @@ public class SaleRepositoryAdapter implements SaleRepository {
     }
 
     private SaleEntity toEntity(Sale sale) {
-        List<SaleItemEntity> itemEntities = sale.getItems().stream()
-                .map(item -> SaleItemEntity.builder()
-                        .id(item.getId())
-                        .saleId(sale.getId())
-                        .productId(item.getProductId())
-                        .batchId(item.getBatchId())
-                        .quantity(item.getQuantity())
-                        .unitPrice(item.getUnitPrice())
-                        .build())
-                .toList();
-
-        return SaleEntity.builder()
+        SaleEntity saleEntity = SaleEntity.builder()
                 .id(sale.getId())
                 .storeId(sale.getStoreId())
                 .userId(sale.getUserId())
@@ -80,7 +69,20 @@ public class SaleRepositoryAdapter implements SaleRepository {
                 .total(sale.getTotal())
                 .correlationId(sale.getCorrelationId())
                 .createdAt(sale.getCreatedAt())
-                .items(new java.util.ArrayList<>(itemEntities))
                 .build();
+
+        List<SaleItemEntity> itemEntities = sale.getItems().stream()
+                .map(item -> SaleItemEntity.builder()
+                        .id(item.getId())
+                        .sale(saleEntity)
+                        .productId(item.getProductId())
+                        .batchId(item.getBatchId())
+                        .quantity(item.getQuantity())
+                        .unitPrice(item.getUnitPrice())
+                        .build())
+                .toList();
+
+        saleEntity.setItems(new java.util.ArrayList<>(itemEntities));
+        return saleEntity;
     }
 }

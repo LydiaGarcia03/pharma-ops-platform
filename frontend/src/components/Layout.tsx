@@ -14,6 +14,7 @@ import {
   LogOut,
   ChevronDown,
   User,
+  RotateCcw,
 } from 'lucide-react'
 import type { RootState } from '@/app/store'
 import { logout } from '@/features/auth/authSlice'
@@ -25,6 +26,7 @@ const navSections = [
       { name: 'Dashboard',        path: '/dashboard', icon: LayoutDashboard },
       { name: 'Point of Sale',    path: '/sales',     icon: ShoppingCart },
       { name: 'Inventory (FEFO)', path: '/inventory', icon: Package },
+      { name: 'Returns',          path: '/returns',   icon: RotateCcw },
     ],
   },
   {

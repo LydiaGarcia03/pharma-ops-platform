@@ -1,6 +1,7 @@
 type Query {
     products: [Product!]!
     product(id: ID!): Product
+    batches: [Batch!]!
     inventory(productId: ID!, storeId: ID!): InventoryItem!
 }
 

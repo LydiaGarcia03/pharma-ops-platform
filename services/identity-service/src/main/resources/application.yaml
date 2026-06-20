@@ -19,6 +19,10 @@ spring:
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
 
+  graphql:
+    graphiql:
+      enabled: true
+
   data:
     redis:
       host: ${REDIS_HOST:localhost}

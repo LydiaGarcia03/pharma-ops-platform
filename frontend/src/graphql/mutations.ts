@@ -37,3 +37,34 @@ export const CREATE_SALE_MUTATION = gql`
     }
   }
 `
+
+export const ADD_BATCH_MUTATION = gql`
+  mutation AddBatch($input: AddBatchInput!) {
+    addBatch(input: $input) {
+      id
+      productId
+      batchNumber
+      expirationDate
+      initialQuantity
+    }
+  }
+`
+
+export const RESTOCK_MUTATION = gql`
+  mutation Restock($input: RestockInput!) {
+    restock(input: $input)
+  }
+`
+
+export const PROCESS_RETURN_MUTATION = gql`
+  mutation ProcessReturn($input: ProcessReturnInput!) {
+    processReturn(input: $input) {
+      id
+      saleId
+      productId
+      quantity
+      reason
+      createdAt
+    }
+  }
+`

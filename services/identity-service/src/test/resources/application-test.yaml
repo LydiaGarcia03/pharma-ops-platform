@@ -1,0 +1,8 @@
+ADMIN_EMAIL: admin@integration.test
+ADMIN_PASSWORD: Integration@Test2026
+ADMIN_NAME: Integration Test Admin
+
+logging:
+  level:
+    com.pharmaops.identity: WARN
+    root: WARN

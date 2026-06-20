@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { useQuery } from '@apollo/client/react'
+import { useQuery, useMutation } from '@apollo/client/react'
+import { useSelector } from 'react-redux'
 import * as Dialog from '@radix-ui/react-dialog'
 import {
   Barcode,
@@ -9,10 +10,13 @@ import {
   ArrowRight,
   Stethoscope,
   AlertCircle,
+  CheckCircle,
   X,
 } from 'lucide-react'
-import { inventoryClient } from '@/graphql/apolloClients'
-import { PRODUCTS_QUERY } from '@/graphql/queries'
+import type { RootState } from '@/app/store'
+import { inventoryClient, identityClient, salesClient } from '@/graphql/apolloClients'
+import { PRODUCTS_QUERY, STORES_QUERY } from '@/graphql/queries'
+import { CREATE_SALE_MUTATION } from '@/graphql/mutations'
 
 interface Product {
   id: string
@@ -37,9 +41,23 @@ export function PointOfSalePage() {
   const [authOpen, setAuthOpen] = useState(false)
   const [pharmacistId, setPharmacistId] = useState('')
   const [authPin, setAuthPin] = useState('')
+  const [saleError, setSaleError] = useState<string | null>(null)
+  const [saleSuccess, setSaleSuccess] = useState(false)
+
+  const user = useSelector((s: RootState) => s.auth.user)
 
   const { data, loading, error } = useQuery<{ products: Product[] }>(PRODUCTS_QUERY, {
     client: inventoryClient,
+  })
+
+  const { data: storesData } = useQuery<{ stores: { id: string; name: string; active: boolean }[] }>(
+    STORES_QUERY,
+    { client: identityClient },
+  )
+  const storeId = storesData?.stores.find((s) => s.active)?.id ?? null
+
+  const [createSale, { loading: saleLoading }] = useMutation(CREATE_SALE_MUTATION, {
+    client: salesClient,
   })
 
   const products = (data?.products ?? []).filter((p) => p.active)
@@ -77,21 +95,54 @@ export function PointOfSalePage() {
 
   const hasControlled = cart.some((i) => i.product.controlled)
 
-  function handlePay() {
-    if (hasControlled) {
-      setAuthOpen(true)
-    } else {
-      alert('Payment processing — Sales Service integration coming in Phase 2.')
+  async function processSale(responsiblePharmacistId?: string) {
+    if (!user?.id || !storeId) {
+      setSaleError('No store available. Make sure at least one store is registered.')
+      return
+    }
+    setSaleError(null)
+    try {
+      await createSale({
+        variables: {
+          input: {
+            storeId,
+            userId: user.id,
+            responsiblePharmacistId: responsiblePharmacistId ?? null,
+            forced: false,
+            items: cart.map((i) => ({
+              productId: i.product.id,
+              controlled: i.product.controlled,
+              quantity: i.qty,
+              unitPrice: i.product.salePrice,
+            })),
+          },
+        },
+      })
       setCart([])
+      setSaleSuccess(true)
+      setTimeout(() => setSaleSuccess(false), 4000)
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : 'Failed to process sale.'
+      setSaleError(msg)
     }
   }
 
-  function handleAuthorize() {
+  function handlePay() {
+    setSaleError(null)
+    if (hasControlled) {
+      setAuthOpen(true)
+    } else {
+      processSale()
+    }
+  }
+
+  async function handleAuthorize() {
+    // Use the current user's ID as the responsible pharmacist for now.
+    // In Phase 4, this will validate against a real pharmacist credential.
+    await processSale(user?.id)
     setAuthOpen(false)
     setPharmacistId('')
     setAuthPin('')
-    alert('Authorized! Sale processing — Sales Service integration coming in Phase 2.')
-    setCart([])
   }
 
   const cardStyle: React.CSSProperties = {
@@ -306,6 +357,16 @@ export function PointOfSalePage() {
 
         {/* Totals */}
         <div className="p-5 space-y-4 shrink-0" style={{ borderTop: '1px solid var(--card-border)', background: '#f8fafc' }}>
+          {saleSuccess && (
+            <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold rounded-md px-3 py-2">
+              <CheckCircle size={14} className="shrink-0" /> Sale confirmed successfully!
+            </div>
+          )}
+          {saleError && (
+            <div className="flex items-start gap-2 bg-red-50 border border-red-200 text-red-700 text-xs font-semibold rounded-md px-3 py-2">
+              <AlertCircle size={14} className="shrink-0 mt-0.5" /> {saleError}
+            </div>
+          )}
           {hasControlled && (
             <div className="border rounded-md p-2.5 flex items-start gap-2 bg-purple-50 border-purple-200">
               <Lock size={14} className="mt-0.5 text-purple-600 shrink-0" />
@@ -339,12 +400,12 @@ export function PointOfSalePage() {
             </div>
           </div>
           <button
-            disabled={cart.length === 0}
+            disabled={cart.length === 0 || saleLoading}
             onClick={handlePay}
             className="w-full py-4 rounded-lg text-white font-bold text-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             style={{ background: 'var(--blue-600)' }}
           >
-            Pay <ArrowRight size={20} />
+            {saleLoading ? 'Processing…' : <><span>Pay</span> <ArrowRight size={20} /></>}
           </button>
         </div>
       </div>

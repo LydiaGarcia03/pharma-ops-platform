@@ -20,7 +20,7 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         // GraphQL endpoint and playground (development)
-                        .requestMatchers("/graphql", "/graphiql/**").permitAll()
+                        .requestMatchers("/graphql", "/graphiql", "/graphiql/**").permitAll()
                         // Called by NGINX to validate tokens before routing
                         .requestMatchers("/internal/auth/validate").permitAll()
                         // Actuator endpoints exposed in application.yaml
