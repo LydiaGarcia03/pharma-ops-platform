@@ -32,6 +32,10 @@ pharmaops:
   services:
     inventory:
       url: ${INVENTORY_SERVICE_URL:http://localhost:8082}
+  kafka:
+    topics:
+      sales-completed: pharmaops.sales.completed
+      returns-processed: pharmaops.returns.processed
 
 management:
   endpoints:

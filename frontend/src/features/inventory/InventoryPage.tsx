@@ -155,7 +155,8 @@ function NewProductModal({ onCreated }: { onCreated: () => void }) {
     e.preventDefault()
     setError('')
     try {
-      await createProduct({ variables: { input: { name, barcode, controlled, salePrice } } })
+      const normalizedPrice = salePrice.replace(',', '.')
+      await createProduct({ variables: { input: { name, barcode, controlled, salePrice: normalizedPrice } } })
       setOpen(false)
       reset()
       onCreated()
@@ -190,7 +191,7 @@ function NewProductModal({ onCreated }: { onCreated: () => void }) {
           </div>
           <div>
             <label style={labelStyle}>Sale Price (R$)</label>
-            <input style={inputStyle} value={salePrice} onChange={(e) => setSalePrice(e.target.value)} placeholder="e.g. 15.99" required />
+            <input style={inputStyle} value={salePrice} onChange={(e) => setSalePrice(e.target.value)} placeholder="e.g. 15,99" required />
           </div>
           <div className="flex items-center justify-between">
             <div>

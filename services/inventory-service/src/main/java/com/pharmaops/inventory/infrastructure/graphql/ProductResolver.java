@@ -39,7 +39,7 @@ public class ProductResolver {
                         input.name(),
                         input.barcode(),
                         input.controlled(),
-                        new BigDecimal(input.salePrice())
+                        new BigDecimal(input.salePrice().replace(",", "."))
                 )
         );
         return ProductResponse.from(product);

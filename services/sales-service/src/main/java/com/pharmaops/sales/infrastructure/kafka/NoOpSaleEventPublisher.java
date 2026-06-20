@@ -6,9 +6,8 @@ import com.pharmaops.sales.domain.model.Sale;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-// Implementação temporária — substituída pelo KafkaSaleEventPublisher na Fase 3.
+// Mantida apenas para referência. Substituída pelo KafkaSaleEventPublisher (Fase 3).
 @Slf4j
-@Component
 public class NoOpSaleEventPublisher implements SaleEventPublisher {
 
     @Override
@@ -18,7 +17,7 @@ public class NoOpSaleEventPublisher implements SaleEventPublisher {
     }
 
     @Override
-    public void publishReturnProcessed(Return returnRecord) {
+    public void publishReturnProcessed(Return returnRecord, java.util.UUID storeId) {
         log.info("[NO-OP] ReturnProcessed event skipped — Kafka not yet configured. returnId={} saleId={}",
                 returnRecord.getId(), returnRecord.getSaleId());
     }

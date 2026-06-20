@@ -20,7 +20,7 @@ public class ProcessReturnUseCaseImpl implements ProcessReturnUseCase {
 
     @Override
     public Return processReturn(Command command) {
-        saleRepository.findById(command.saleId())
+        var sale = saleRepository.findById(command.saleId())
                 .orElseThrow(() -> new SaleNotFoundException(command.saleId()));
 
         Return returnRecord = Return.builder()
@@ -37,7 +37,7 @@ public class ProcessReturnUseCaseImpl implements ProcessReturnUseCase {
                 .build();
 
         Return saved = returnRepository.save(returnRecord);
-        eventPublisher.publishReturnProcessed(saved);
+        eventPublisher.publishReturnProcessed(saved, sale.getStoreId());
         return saved;
     }
 }

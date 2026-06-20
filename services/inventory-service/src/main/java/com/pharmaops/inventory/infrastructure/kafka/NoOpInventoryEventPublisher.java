@@ -7,9 +7,8 @@ import com.pharmaops.inventory.domain.model.MovementType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-// Implementação temporária — substituída pelo KafkaInventoryEventPublisher na Fase 3.
+// Mantida apenas para referência. Substituída pelo KafkaInventoryEventPublisher (Fase 3).
 @Slf4j
-@Component
 public class NoOpInventoryEventPublisher implements InventoryEventPublisher {
 
     @Override

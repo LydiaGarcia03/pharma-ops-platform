@@ -30,6 +30,13 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
+pharmaops:
+  kafka:
+    topics:
+      sales-completed: pharmaops.sales.completed
+      returns-processed: pharmaops.returns.processed
+      inventory-updated: pharmaops.inventory.updated
+
 server:
   port: ${SERVER_PORT:8082}
 

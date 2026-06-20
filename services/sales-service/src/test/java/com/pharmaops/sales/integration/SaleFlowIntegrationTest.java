@@ -4,6 +4,7 @@ import com.pharmaops.sales.application.port.in.CreateSaleUseCase;
 import com.pharmaops.sales.application.port.in.GetSaleUseCase;
 import com.pharmaops.sales.application.port.in.ProcessReturnUseCase;
 import com.pharmaops.sales.application.port.out.InventoryReservationPort;
+import com.pharmaops.sales.application.port.out.SaleEventPublisher;
 import com.pharmaops.sales.domain.exception.StockReservationException;
 import com.pharmaops.sales.domain.model.Return;
 import com.pharmaops.sales.domain.model.Sale;
@@ -41,6 +42,10 @@ class SaleFlowIntegrationTest {
     // sem precisar de WireMock — incompatível com Java 25.
     @MockitoBean
     InventoryReservationPort inventoryReservationPort;
+
+    // Evita que o KafkaSaleEventPublisher tente conectar ao Kafka durante os testes
+    @MockitoBean
+    SaleEventPublisher saleEventPublisher;
 
     @Autowired private CreateSaleUseCase createSale;
     @Autowired private GetSaleUseCase getSale;
